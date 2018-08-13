@@ -1,0 +1,149 @@
+<button (click)="showUserForm = !showUserForm" class="btn btn-dark mb-3"> Add User</button>
+<div class="card card-body mb-3" *ngIf="showUserForm">
+  <h2>Add user</h2>
+  <!-- Template driven form 
+  #userForm is a variable set to ngForm and pass value of userForm into on submit-->
+  <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+    <div class="form-group">
+      <!-- List of Input Events:
+      (keydown)s
+      (keyup)
+      (keypress)
+      (focus)
+      (blur) - click outside of intput
+      (cut) - if you cut something
+      (paste) - if you paste something -->
+      <label>First Name</label>
+      <!-- NG model is two way binding
+      [] componenet to template: prop, class binding
+      () events: template to component -->
+
+      <!-- is-invalid and invalid feedback are tired together -->
+      <input 
+        [(ngModel)]="user.firstName" 
+        type="text" 
+        [ngClass]="{'is-invalid' : userFirstName.errors && userFirstName.touched}"
+        class="form-control" 
+        name="firstName"
+        #userFirstName="ngModel"
+        required
+        minlength="2">
+        <!-- Show error messages -->
+      <div [hidden]="!userFirstName.errors?.required"class="invalid-feedback">First Name Required</div>
+      <div [hidden]="!userFirstName.errors?.minlength" class="invalid-feedback">Must at least be 2 characters</div>
+    </div>
+
+    <div class="form-group">
+      <label>Last Name</label>
+      <input 
+        [(ngModel)]="user.lastName" 
+        [ngClass]="{'is-invalid' : userLastName.errors && userLastName.touched}"
+        type="text" 
+        class="form-control" 
+        name="lastName"
+        #userLastName="ngModel"
+        required
+        minlength="2">
+        <!-- Display error message for lastname -->
+        <div [hidden]="!userLastName.errors?.required"class="invalid-feedback">Last Name Required</div>
+        <div [hidden]="!userLastName.errors?.minlength" class="invalid-feedback">Must at least be 2 characters</div>
+    </div>
+    
+    <div class="form-group">
+      <label>Email</label>
+      <input 
+      [(ngModel)]="user.email" 
+      type="email" 
+      class="form-control" 
+      name="email"
+      [ngClass]="{'is-invalid' : userEmail.errors && userEmail.touched}"
+        #userEmail="ngModel"
+        required
+        pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
+        <div [hidden]="!userEmail.errors?.required"class="invalid-feedback">Last Name Required</div>
+        <div [hidden]="!userEmail.errors?.pattern" class="invalid-feedback">Email is not valid</div>
+    </div>
+    <!-- <div class="form-group">
+      <label>Street Address</label>
+      <input [(ngModel)]="user.address.street" type="text" class="form-control" name="street">
+    </div>
+    <div class="form-group">
+      <label>City</label>
+      <input [(ngModel)]="user.address.city" type="text" class="form-control" name="city">
+    </div>
+    <div class="form-group">
+      <label>State</label>
+      <input [(ngModel)]="user.address.state" type="text" class="form-control" name="state">
+    </div> -->
+
+    <!-- Property binding syntax (allows hover over and click-> [disabled]="!enabledAdd" -->
+    <!-- [ngClass]="currentClasses" allows you to change the current class based on variable -->
+    <!-- EVENTS: (click)="fireEvent($event)" clicked
+        (mouseover) (mouseout) (dblclick) (drag) (dragover)
+      (click)="addUser()" -->
+    <button [disabled]="!userForm.form.valid" class="btn btn-block mb-3">Add new user</button>
+
+  </form>
+
+</div>
+<ul class="list-unstyled" *ngIf="loaded && users?.length > 0">
+  <!-- [class.bg-light]="user.isActive" 
+    Allows the class to be dynmically put based on  the value-->
+  <!-- [style.border-color]="user.isActive ? 'green' : ''" -->
+  <li class="card card-body mb-2" *ngFor="let user of users" [class.bg-light]="user.isActive">
+    <!-- [style.border-color]="user.isActive ? 'green' : ''" -->
+    <!-- Style binding for border  = variable      ternary operator -->
+    <!-- <div class="row"> -->
+    <!-- <div class="col-sm-4"> -->
+    <!-- [src] vs scr, the [src] allows the user.image to be processed as an object whereas scr will just accept whatever is inside the parameters as a string, user.imgage would literally be user.image -->
+
+    <!-- <img *ngIf="user.image" class="img-fluid" [src]="user.image" alt=""> -->
+    <!-- <img *ngIf="user.image" class="img-fluid" bind-src="user.image" alt=""> -->
+    <!-- ^SAME THING -->
+
+    <!-- npm start -> starts the application like ng serve
+        npm build -> build the application -->
+    <!-- <img *ngIf="user.image" class="img-fluid" src="{{user.image}}" alt=""> -->
+    <!-- </div> -->
+    <!-- <div class="col-sm-8"> -->
+    <!-- String interpolation -->
+
+    <h3 [ngStyle]="currentStyles"> {{user.firstName }} {{user.lastName}}
+      <!-- *ngIf="user.age && user.address" -->
+      <small>
+        <button (click)="user.hide = !user.hide" class="btn btn-dark btn btn-sm">
+          <i [ngClass]="user.hide ? 'fa fa-plus' : 'fa fa-minus'" class="fa fa-plus"></i>
+        </button>
+
+      </small>
+    </h3>
+    <!-- && user.age && user.address" -->
+    <ul class="list-group" *ngIf="!user.hide">
+      <li class="list-group-item">Email: {{user.email}}</li>
+      <!-- <li class="list-group-item">Address: {{user.address.street}}, {{user.address.city}}, {{user.address.state}}</li> -->
+
+      <!-- PIPES: | currency:"GBP":"code" each time you do : that is a parameter -->
+      <!-- <li class="class list-group-item">Balence: {{user.balence | currency}} until {{1 | percent}}</li> -->
+
+      <!-- :date:"mm/dd/yyyy" date:shortDate date:longDate date:fullDate 
+        date:shortTime date:longTime -->
+      <li class="class list-group-item">Joined: {{user.registered | date:shortDate}}</li>
+
+      <!-- left side 2 right side 5  number:"2.5" -->
+      <!-- ngNonBindable shows the code, good for blogs -->
+      <!-- <li class="list-group-item" ngNonBindable><pre>{{5 | number:"2.5"}}</pre></li> -->
+    </ul>
+    <!-- Shortcuts -->
+    <!-- option+arrowkeys = move up and down chunk-->
+    <!-- shift+option+f = auto -->
+
+    <!-- Shift+arrowkeys = highlight chunk single char-->
+    <!-- Shift+option = highlight chunk single words-->
+    <!-- Shift+option = highlight chunk entire line -->
+    <!-- </div> -->
+    <!-- </div> -->
+  </li>
+</ul>
+
+<h4 *ngIf="users?.length == 0">No users found</h4>
+<h4 *ngIf="!loaded">Loading Users...</h4>
