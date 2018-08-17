@@ -5,8 +5,10 @@ import { AppComponent } from './app.component';
 import { UserComponent } from './components/user/user.component';
 import { UsersComponent } from './components/users/users.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { UserService } from './services/user.service';
 // This is like the application.ts file, where everything is
 @NgModule({
+  // componenets go here
   declarations: [
     AppComponent,
     UserComponent,
@@ -17,7 +19,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     BrowserModule,
     FormsModule
   ],
-  providers: [],
+  // services go here
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
