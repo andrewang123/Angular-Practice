@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild} from '@angular/core'; // must havet this in beginning
 import { User } from '../../models/User';
+import { userInfo } from 'os';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -108,6 +109,9 @@ export class UsersComponent implements OnInit {
   //   };
   // }
 
+  // using a template driven form
+  // value is the user
+  // valid is the boolean to chck if the form is valud
   onSubmit({value, valid} : {value : User, valid : boolean}) {
     if(!valid){
       console.log("form is not valid");
